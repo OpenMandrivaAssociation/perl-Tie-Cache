@@ -1,6 +1,6 @@
 %define module	Tie-Cache
 %define version 0.17
-%define release %mkrel 5
+%define release %mkrel 7
 
 Summary:	%{module} module for perl
 Name:		perl-%{module}
