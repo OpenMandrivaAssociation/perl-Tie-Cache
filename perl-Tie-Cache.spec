@@ -1,25 +1,25 @@
-%define module	Tie-Cache
-%define version 0.17
-%define release %mkrel 8
+%define upstream_name	 Tie-Cache
+%define upstream_version 0.17
 
-Summary:	%{module} module for perl
-Name:		perl-%{module}
-Version:	%{version}
-Release:	%{release}
+Name:       perl-%{upstream_name}
+Version:    %perl_convert_version %{upstream_version}
+Release:    %mkrel 1
+Summary:	LRU Cache in Memory
 License:	GPL or Artistic
 Group:		Development/Perl
-Source0:	%{module}-%{version}.tar.bz2
-Url:		http://search.cpan.org/dist/%{module}/
-BuildRequires:	perl-devel
-BuildRoot:	%{_tmppath}/%{name}-buildroot/
-Requires:	perl
+Url:		http://search.cpan.org/dist/%{upstream_name}
+Source0:	http://www.cpan.org/modules/by-module/Crypt/%{upstream_name}-%{upstream_version}.tar.bz2
 BuildArch:	noarch
+BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
-%{module} module for perl
+This module implements a least recently used (LRU) cache in memory through a
+tie interface. Any time data is stored in the tied hash, that key/value pair
+has an entry time associated with it, and as the cache fills up, those members
+of the cache that are the oldest are removed to make room for new entries.
 
 %prep
-%setup -q -n %{module}-%{version}
+%setup -q -n %{upstream_name}-%{upstream_version}
 
 %build
 %{__perl} Makefile.PL INSTALLDIRS=vendor
@@ -30,18 +30,16 @@ BuildArch:	noarch
 %{__make} test
 
 %clean 
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 %makeinstall_std
 # Fix bogus dependency on Tie::Cache::LRU:
-rm -f $RPM_BUILD_ROOT%perl_vendorlib/Tie/bench.pl
+rm -f %{buildroot}%perl_vendorlib/Tie/bench.pl
 
 %files
 %defattr(-,root,root)
 %doc CHANGES README
 %{_mandir}/*/*
 %{perl_vendorlib}/Tie
-
-
